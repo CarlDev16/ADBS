@@ -43,4 +43,18 @@ router.delete("/delete/:id", (req, res) => {
     });
 });
 
+// Update Task Name
+router.put("/update-name/:id", (req, res) => {
+    taskControllers.updateTaskName(req.params.id, req.body.taskName).then((result) => {
+        res.send(result);
+    });
+});
+
+// Complete Task
+router.put("/complete/:id", (req, res) => {
+    taskControllers.completeTask(req.params.id).then((result) => {
+        res.send(result);
+    });
+});
+
 module.exports = router;

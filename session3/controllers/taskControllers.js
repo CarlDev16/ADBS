@@ -122,3 +122,67 @@ module.exports.deleteTask = (taskId) => {
         }
     });
 };
+
+//Update TaskName
+module.exports.updateTaskName = (taskId, newName) => {
+    if (!newName || newName.trim() === "") {
+        return Promise.resolve({
+            code: 400,
+            message: "ERROR: Task name is required."
+        });
+    }
+
+    return Task.findByIdAndUpdate(
+        taskId,
+        { taskName: newName },
+        { new: true, runValidators: true }
+    )
+    .then((result) => {
+        if (!result) {
+            return {
+                code: 404,
+                message: "ERROR: Task not found."
+            };
+        }
+        return {
+            code: 200,
+            message: "SUCCESS: Task name updated.",
+            data: result
+        };
+    })
+    .catch((err) => {
+        return {
+            code: 500,
+            message: "ERROR: Failed to update task name."
+        };
+    });
+};
+
+//Complete Task
+module.exports.completeTask = (taskId) => {
+    return Task.findByIdAndUpdate(
+        taskId,
+        { status: "completed" },
+        { new: true }
+    )
+    .then((result) => {
+        if (!result) {
+            return {
+                code: 404,
+                message: "ERROR: Task not found."
+            };
+        }
+        return {
+            code: 200,
+            message: "SUCCESS: Task completed.",
+            data: result
+        };
+    })
+    .catch((err) => {
+        return {
+            code: 500,
+            message: "ERROR: Failed to complete task."
+        };
+    });
+};
+
